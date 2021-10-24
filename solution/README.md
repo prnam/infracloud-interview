@@ -34,3 +34,41 @@ c25917c3b147   infracloudio/csvserver:latest   "/csvserver/csvserver"   2 minute
 
 - Ran `curl -o ./part-1-output http://localhost:9393/raw` to generate `part-1-output`. File uploaded in `solution` directory.
 - Ran  `sudo docker logs [container_id] >& part-1-logs` to save log info. `part-1-logs` file uploaded in `solition` directory.
+
+## Part-II
+
+In order to create and run the `docker-compose` file for `Part-I`, we need to make sure we have everything mentioned in it, such as     
+- image: because we have pulled image earlier and did not delete the image we can assume it is present if not it will pulled provided system is exposed to internet or atleast registry domain, 
+- dependenices: `inputFile` is generated and located where the `docker-compose.yml` file is present, 
+- ports: `9393` or `9300` is not used by any services,
+- compose file: `docker-compose.yml` file is present in your present working directory and
+- `docker-compose` executable is installed along with `docker-ce` engine (most linux distros needs manual install)
+
+If all the above is satisifed; run the below command to verify if file is as per the standard syntax
+
+```console
+sudo docker-compose -f docker-compose.yml config
+```
+If there is no error thrown, then please run the below command to get the conatiners running
+```console
+sudo docker-compose up -d
+```
+OR (based on your `docker-compose` version)
+```console
+sudo docker compose up -d
+```
+You can verfiy if conatiners are running by checking `docker ps -a` output or accessing the published port of the host through browser
+
+```
+http://localhost:9393
+```
+OR (for outside host i.e from your client machine to access over your favourite browser)
+```
+http://<host-ip-address>:9393
+```
+- Run `curl -o ./part-1-output http://localhost:9393/raw` to generate `part-1-output` file.
+- Run `sudo docker logs [container_id] >& part-1-logs` to save log info into `part-1-logs` file.
+- To bring down the container, run the below command from directory where the `docker-compose.yml` was present while you started it.
+```console
+sudo docker-compose down
+```
