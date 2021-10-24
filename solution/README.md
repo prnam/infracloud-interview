@@ -72,3 +72,48 @@ http://<host-ip-address>:9393
 ```console
 sudo docker-compose down
 ```
+
+## Part-III
+- Assuming that you're sucessful executing all steps of [Part-II](#Part-II), we are extending the `docker-compose.yml` file with `prometheus` to monitor our `infracloud-csvserver` container
+- It is similar to earlier conatiner setup, only difference here is we use default port of prometheus which is `9090` and publishing same (make sure it not in use before running), adding custom `scrape_configs' using `prometheus.yml` file. 
+- Although we monitor `infracloud-csvserver` container we did not add `depends_on` since `prometheus` needs to keep running and show historical metrics even when `infracloud-csvserver` container is down / crashed
+- We are scraping `infracloud-csvserver` on port `9300` which is exposed to container world with endpoint `metrics`, every 1 second (5 seconds is good for most prod but for this excerise there is no harm doing so, hence the 1s value)
+
+If all the above is satisifed; run the below command to verify if file is as per the standard syntax
+
+```console
+sudo docker-compose -f docker-compose.yml config
+```
+If there is no error thrown, then please run the below command to get the conatiners running
+```console
+sudo docker-compose up -d
+```
+OR (based on your `docker-compose` version)
+```console
+sudo docker compose up -d
+```
+You can verfiy if conatiners are running by checking `docker ps -a` output or accessing the published port of the host through browser
+
+```
+http://localhost:9393
+```
+OR (for outside host i.e from your client machine to access over your favourite browser)
+```
+http://<host-ip-address>:9393
+```
+You can verfiy if `prometheus` conatiner is running by checking `docker ps -a` output or accessing the published port of the host through browser
+
+```
+http://localhost:9090
+```
+OR (for outside host i.e from your client machine to access over your favourite browser)
+```
+http://<host-ip-address>:9090
+```
+- Run `curl -o ./part-1-output http://localhost:9393/raw` to generate `part-1-output` file
+- Run `sudo docker logs [container_id] >& part-1-logs` to save log info into `part-1-logs` file
+-  Navigate to `http://localhost:9090/graph` and type `csvserver_records` (or select from dropdown) in the query box. Click on Execute and then switch to the Graph tab. You should be able to see a graph with constant line (mostly in red) matching a your `inputFile` records
+- To bring down the container, run the below command from directory where the `docker-compose.yml` was present while you started it
+```console
+sudo docker-compose down
+```

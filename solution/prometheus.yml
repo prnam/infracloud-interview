@@ -1,0 +1,7 @@
+scrape_configs:
+- job_name: 'infracloud'
+  scrape_interval: 1s
+  static_configs:
+    - targets: ['infracloud-csvserver:9300']
+      labels:
+          group: 'production'
