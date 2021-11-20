@@ -1,7 +1,7 @@
 services:
   infracloud-csvserver:
-    environment:
-      CSVSERVER_BORDER: Orange
+    env_file:
+      - .env
     image: "infracloudio/csvserver:latest"
     ports:
       - 9393:9300
